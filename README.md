@@ -186,44 +186,38 @@ aws logs put-log-events \
     --log-stream-name my-server-logs \
     --log-events timestamp=$TIMESTAMP,message="$MESSAGE"
 ```
-**Bonus part**
-Systemd Implementation (Replacing Cron)
-To modernize the scheduling, Systemd was used instead of Cron.
+## 5. Bonus Implementation
 
-Service File: /etc/systemd/system/system_report.service
+### 5.1 Systemd Implementation (Replacing Cron)
+**Objective:** Modernize the scheduling mechanism by replacing Cron with Systemd.
 
-Defines what to run (/usr/local/bin/system_report.sh).
+**Service File:** `/etc/systemd/system/system_report.service`
+* Defines what to run (`/usr/local/bin/system_report.sh`)
 
-Timer File: /etc/systemd/system/system_report.timer
+**Timer File:** `/etc/systemd/system/system_report.timer`
+* Defines when to run (Every 5 minutes)
 
-Defines when to run (Every 5 minutes).
-
-Commands used:
-
-Bash
-
+**Commands Used:**
+```bash
 sudo systemctl daemon-reload
 sudo systemctl enable --now system_report.timer
 sudo systemctl list-timers --all
+```
 
-Email Alerts (AWS SES)
+---
 
-Objective: Send an email alert when Disk Usage exceeds a threshold.
+### 5.2 Email Alerts (AWS SES)
+**Objective:** Send an email alert when Disk Usage exceeds a threshold.
 
-Service Used: AWS Simple Email Service (SES)
+**Configuration:**
+* **Service Used:** AWS Simple Email Service (SES)
+* **Region:** eu-north-1
+* **Sender/Receiver:** miteshmaity280603@gmail.com (Verified Identity)
+* **Logic:** The `system_report.sh` script was updated with conditional logic
+* **Test Threshold:** Set to 10% (instead of 80%) to force a successful test alert during the assignment, as current disk usage was ~40%
 
-Region: eu-north-1
-
-Sender/Receiver: miteshmaity280603@gmail.com (Verified Identity)
-
-Logic Implemented: The system_report.sh script was updated with conditional logic.
-
-Test Threshold: Set to 10% (instead of 80%) to force a successful test alert during the assignment, as current disk usage was ~40%.
-
-Code Snippet:
-
-Bash
-
+**Implementation Code:**
+```bash
 DISK_USAGE=$(df / | grep / | awk '{ print $5 }' | sed 's/%//g')
 THRESHOLD=10  # Set low for testing purposes
 
@@ -234,3 +228,25 @@ if [ "$DISK_USAGE" -gt "$THRESHOLD" ]; then
         --message "Subject={Data='Alert: High Disk Usage'},Body={Text={Data='Warning: Disk usage is above $THRESHOLD%.'}}" \
         --region eu-north-1
 fi
+```
+
+---
+
+## 📸 Screenshots & Deliverables
+* EC2 Instance Details
+* Nginx Web Page
+* System Report Logs
+* CloudWatch Log 
+* Email Alert from AWS SES
+* Scripts used 
+
+---
+
+## 🎯 Conclusion
+This assignment successfully demonstrates:
+* Cloud infrastructure setup on AWS
+* Web service deployment with Nginx
+* Automated monitoring using Bash scripting
+* Log centralization with AWS CloudWatch
+* Advanced scheduling with Systemd
+* Proactive alerting with AWS SES
