@@ -1,0 +1,9 @@
+[Unit]
+Description=Run System Report Script
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/system_report.sh
+# This sends the output to your log file just like Cron did
+StandardOutput=append:/var/log/system_report.log
+StandardError=append:/var/log/system_report.log
