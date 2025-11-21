@@ -185,6 +185,7 @@ aws logs put-log-events \
     --log-group-name /devops/intern-metrics \
     --log-stream-name my-server-logs \
     --log-events timestamp=$TIMESTAMP,message="$MESSAGE"
+```
 **Bonus part**
 Systemd Implementation (Replacing Cron)
 To modernize the scheduling, Systemd was used instead of Cron.
