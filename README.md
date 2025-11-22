@@ -167,8 +167,8 @@ The script is scheduled to run every 5 minutes.
 ## 4. AWS CloudWatch Integration
 **Objective:** Centralize logs by pushing them to the cloud.
 
-* **Log Group Name:** `/devops/intern-metrics`
-* **Log Stream Name:** `my-server-logs`
+* **Log Group Name:** `/devops/powerplay-server-metrics`
+* **Log Stream Name:** `powerplay-server-logs`
 
 **Implementation:**
 Since `put-log-events` requires a sequence token and specific JSON format, the following command block is used to push the latest logs:
